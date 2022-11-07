@@ -7,4 +7,5 @@ import java.lang.annotation.*;
 @Documented
 public @interface SHMapping {
     public String path();
+    public String method() default "GET";
 }

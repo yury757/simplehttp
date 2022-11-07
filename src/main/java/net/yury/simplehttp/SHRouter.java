@@ -2,7 +2,6 @@ package net.yury.simplehttp;
 
 import io.netty.handler.codec.http.HttpMethod;
 import net.yury.simplehttp.annotation.SHController;
-import net.yury.simplehttp.annotation.SHMethod;
 import net.yury.simplehttp.annotation.SHMapping;
 
 import java.lang.reflect.Method;
@@ -30,16 +29,16 @@ public class SHRouter {
 
     public Object answer(HttpMethod method, String uri, String content) {
         if (!routerMap.containsKey(uri)) {
-            throw new RuntimeException("uri " + uri + "not exists");
+            throw new RuntimeException("uri " + uri + " not exists");
         }
         Object[] os = routerMap.get(uri);
         Method declaredMethod = (Method)os[0];
         String requiredMethod;
-        SHMethod methodAnnotation = declaredMethod.getAnnotation(SHMethod.class);
-        if (methodAnnotation == null) {
+        SHMapping annotation = declaredMethod.getAnnotation(SHMapping.class);
+        if (annotation == null) {
             requiredMethod = HttpMethod.GET.name();
         }else {
-            requiredMethod = methodAnnotation.name();
+            requiredMethod = annotation.method();
         }
         if (!requiredMethod.equals(method.name())) {
             throw new RuntimeException("method " + method.name() + " not match");
